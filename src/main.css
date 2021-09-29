@@ -1,0 +1,45 @@
+table {
+    border: 1px solid black;
+    /* table-layout: fixed; */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+th,
+td {
+    border: 1px solid black;
+    width: 100px;
+    height: 50px;
+    padding: 0;
+}
+.today {
+    background: yellow;
+}
+
+.pastday{
+    background: grey;
+}
+
+td a {
+    display: block;
+    height: 40px;
+    width: 100%;
+}
+
+.available-date:hover{
+background: blue;
+}
+
+
+.timeslot{
+    float: left;
+    width: 200px;
+    margin-bottom:15px
+}
+
+.timeslot-group{
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 800px;
+}
