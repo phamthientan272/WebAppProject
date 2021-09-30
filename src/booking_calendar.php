@@ -1,11 +1,34 @@
 <?php
+if (!isset($_SESSION))  session_start();
+
+// Check if service type is selected or not, if not, redirect to select service type first
+if (isset($_GET['service'])){
+    $_SESSION['service'] = $_GET['service'];
+}
+
+if (!isset($_SESSION['service'])){
+    header("Location: booking_service.php");
+    exit();
+}
+
+// ----------------------
+
+
+
+
+if (isset($_GET['date'])) {
+    $_SESSION['selectedDate'] = $_GET['date'];
+
+    $bookings = array();
+}
+
+if (!isset($_SESSION['selectedDate'])) {
+    $_SESSION['selectedDate'] = date("Y-m-d");
+}
 
 
 function build_calendar($month, $year)
 {
-    if (isset($_GET['date'])) {
-        $selectedDate = $_GET['date'];
-    }
 
     @$mysqli = new mysqli('localhost', 'f32ee', 'f32ee', 'f32ee');
     $daysOfWeek = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
@@ -22,9 +45,11 @@ function build_calendar($month, $year)
 
     $calendar = "<table class='table table-bordered'>";
     $calendar .= "<center><h2>$monthName $year</h2>";
-    $calendar .= "<a class='btn btn-primary btn-xs' href='?month=" . $prevMonth . "&year=" . $prevYear . "'>Prev Month</a>";
-    $calendar .= "<a class='btn btn-primary btn-xs' href='?month=" . date('m') . "&year=" . date("Y") . "&date=".date("Y-m-d")."'>Current Month</a>";
-    $calendar .= "<a class='btn btn-primary btn-xs' href='?month=" . $nextMonth . "&year=" . $nextYear . "'>Next Month</a></center>";
+
+    $selectedDate = $_SESSION['selectedDate'];
+    $calendar .= "<a class='btn btn-primary btn-xs' href='?month=" . $prevMonth . "&year=" . $prevYear . "&date=".$selectedDate."'>Prev Month</a>";
+    $calendar .= "<a class='btn btn-primary btn-xs' href='?month=" . date('m') . "&year=" . date("Y") . "&date=".$selectedDate."'>Current Month</a>";
+    $calendar .= "<a class='btn btn-primary btn-xs' href='?month=" . $nextMonth . "&year=" . $nextYear . "&date=".$selectedDate."'>Next Month</a></center>";
     $calendar .= "<br><tr>";
 
     //Display day of week header
@@ -43,7 +68,6 @@ function build_calendar($month, $year)
 
     $month = str_pad($month, 2, "0", STR_PAD_LEFT);
     while ($currentDay <= $numberDays) {
-        //New row after display 7 days in a week
         if ($dayOfWeek == 7) {
             $dayOfWeek = 0;
             $calendar .= "</tr><tr>";
@@ -52,18 +76,12 @@ function build_calendar($month, $year)
         $currentDayRel = str_pad($currentDay, 2, "0", STR_PAD_LEFT);
         $date = "$year-$month-$currentDayRel";
 
-        if (isset($selectedDate)){
-            $today = $date == $selectedDate ? 'today' : '';
-
-        } else{
-            $today = $date == date("Y-m-d") ? 'today' : '';
-        }
-
+        $selected = $date == $_SESSION['selectedDate'] ? 'selected' : '';
         if ($date < date('Y-m-d')) {
-            $calendar .= "<td class='pastday'> <h4>$currentDay</h4></td>";
+            $calendar .= "<td class='pastday' > <h4>$currentDay</h4></td>";
         } else {
 
-            $calendar .= "<td class='$today available-date'><a  href='?month=" . $month . "&year=" . $year . "&date=" . $date . "'>
+            $calendar .= "<td class='$selected available-date'  ><a  href='?month=" . $month . "&year=" . $year . "&date=" . $date . "'>
             <h4>$currentDay</h4></a></td>";
         }
 
@@ -111,17 +129,49 @@ function timeslots($duration, $cleanup, $start, $end)
     return $slots;
 }
 
+function build_timeslot($duration, $cleanup, $start, $end, $bookings)
+{
+    $selectedDate = isset($_SESSION['selectedDate']) ? date('d/m/Y', strtotime($_SESSION['selectedDate'])) : date("d/m/Y");
+    $timeslotHtml = "<form method='POST'>";
+    $timeslotHtml .= "<h3 class='text-center'>Book for Date: $selectedDate </h3>";
+
+    $timeslots = timeslots($duration, $cleanup, $start, $end);
+    foreach ($timeslots as $ts) {
+
+        $timeslotHtml .=  "<div class='timeslot'>";
+        if (in_array($ts, $bookings)) {
+            $timeslotHtml .= "<button class='btn btn-booked'>$ts</button>";
+        } else {
+            $timeslotHtml .= "<button name='book' type='submit' class='btn btn-available' value='$ts'> $ts</button>";
+        }
+        $timeslotHtml .= "</div>";
+    }
+
+    $timeslotHtml .= "</form>";
+    return $timeslotHtml;
+}
+
+
+if (isset($_POST['book'])) {
+    $_SESSION['timeslot'] = $_POST['book'];
+
+    //TODO: Check timeslot available in database or not before moving on
+
+    header("Location: booking_confirmation.php?");
+    exit();
+}
 
 ?>
 
 
-</script>
+
 <html lang="en">
 
 <head>
     <title>Booking Calendar</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="main.css">
+
 </head>
 
 <body>
@@ -140,22 +190,15 @@ function timeslots($duration, $cleanup, $start, $end)
             echo build_calendar($month, $year);
             ?>
         </div>
+
+        <div class="timeslot-group">
+            <?php
+            echo build_timeslot($duration, $cleanup, $start, $end, $bookings);
+            ?>
+        </div>
     </div>
 
-    <div class="timeslot-group">
-        <h3 class="text-center">Book for Date: <?php echo date('d/m/Y', strtotime($_GET['date'])); ?></h3>
-        <?php $timeslots = timeslots($duration, $cleanup, $start, $end);
-        foreach ($timeslots as $ts) {
-        ?>
-            <div class="timeslot">
-                <?php if (in_array($ts, $bookings)) { ?>
-                    <button class="btn btn-booked"><?php echo $ts; ?></button>
-                <?php } else { ?>
-                    <button class="btn btn-available" data-timeslot="<?php echo $ts; ?>"><?php echo $ts; ?></button>
-                <?php } ?>
-            </div>
-        <?php } ?>
-    </div>
+
 </body>
 
 </html>

@@ -12,7 +12,7 @@ td {
     height: 50px;
     padding: 0;
 }
-.today {
+.selected {
     background: yellow;
 }
 
