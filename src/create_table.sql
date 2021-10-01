@@ -1,0 +1,9 @@
+CREATE TABLE bookings (
+id INT( 11 ) NOT NULL AUTO_INCREMENT ,
+service VARCHAR( 255 ) NOT NULL ,
+timeslot VARCHAR( 255 ) NOT NULL ,
+date DATE NOT NULL ,
+name VARCHAR( 255 ) NOT NULL ,
+email VARCHAR( 255 ) NOT NULL ,
+PRIMARY KEY ( id )
+)
