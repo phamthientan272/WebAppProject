@@ -7,12 +7,7 @@ if (!isset($_SESSION['service']) || !isset($_SESSION['timeslot']) || !isset($_SE
 }
 
 $mysqli = new mysqli('localhost', 'f32ee', 'f32ee', 'f32ee');
-if ($mysqli->connect_error) {
-    echo "Database is not online";
-    exit;
-    // above 2 statments same as die() //
-} else
-    echo "Congratulations...  MySql is working..";
+
 
 if (isset($_POST['submit'])) {
     $name = $_POST['name'];
@@ -25,8 +20,6 @@ if (isset($_POST['submit'])) {
     $result = $mysqli->query("select * from bookings where service = '" . $service . "' AND
     date = '" . $date . "' AND timeslot = '" . $timeslot . "'");
     $num_results = $result->num_rows;
-    echo "Hello";
-    echo $num_results;
     if ($num_results > 0) {
         $msg = "<div class='alert alert-danger'>Already Booked</div>";
     } else {
@@ -65,12 +58,14 @@ function print_booking_info()
 <body>
     <div class="container">
         <div class="confirmation-group">
+            <a href="booking_calendar.php">Back</a>
             <div class="booking-info">
                 <?php
                 print_booking_info();
                 ?>
             </div>
             <div class="patient-info">
+
                 <form method="post">
                     <label for="name">*Name:</label>
                     <input type="text" name="name" id="name" required placeholder="Enter your name here">

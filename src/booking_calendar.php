@@ -1,12 +1,14 @@
 <?php
 if (!isset($_SESSION))  session_start();
+$mysqli = new mysqli('localhost', 'f32ee', 'f32ee', 'f32ee');
+
 
 // Check if service type is selected or not, if not, redirect to select service type first
-if (isset($_GET['service'])){
+if (isset($_GET['service'])) {
     $_SESSION['service'] = $_GET['service'];
 }
 
-if (!isset($_SESSION['service'])){
+if (!isset($_SESSION['service'])) {
     header("Location: booking_service.php");
     exit();
 }
@@ -14,17 +16,27 @@ if (!isset($_SESSION['service'])){
 // ----------------------
 
 
-
+// Get selected date and all booked timeslot for that date
 
 if (isset($_GET['date'])) {
     $_SESSION['selectedDate'] = $_GET['date'];
 
-    $bookings = array();
+
 }
 
+// Default selected date is today
 if (!isset($_SESSION['selectedDate'])) {
     $_SESSION['selectedDate'] = date("Y-m-d");
+
 }
+$result = $mysqli->query("select * from bookings where date = '" . $_SESSION['selectedDate'] . "' AND service = '" . $_SESSION['service'] . "' ");
+$bookings = array();
+$num_results = $result->num_rows;
+for ($i = 0; $i < $num_results; $i++) {
+    $row = $result->fetch_assoc();
+    $bookings[] = $row['timeslot'];
+}
+$result->free();
 
 
 function build_calendar($month, $year)
@@ -47,9 +59,9 @@ function build_calendar($month, $year)
     $calendar .= "<center><h2>$monthName $year</h2>";
 
     $selectedDate = $_SESSION['selectedDate'];
-    $calendar .= "<a class='btn btn-primary btn-xs' href='?month=" . $prevMonth . "&year=" . $prevYear . "&date=".$selectedDate."'>Prev Month</a>";
-    $calendar .= "<a class='btn btn-primary btn-xs' href='?month=" . date('m') . "&year=" . date("Y") . "&date=".$selectedDate."'>Current Month</a>";
-    $calendar .= "<a class='btn btn-primary btn-xs' href='?month=" . $nextMonth . "&year=" . $nextYear . "&date=".$selectedDate."'>Next Month</a></center>";
+    $calendar .= "<a class='btn btn-primary btn-xs' href='?month=" . $prevMonth . "&year=" . $prevYear . "&date=" . $selectedDate . "'>Prev Month</a>";
+    $calendar .= "<a class='btn btn-primary btn-xs' href='?month=" . date('m') . "&year=" . date("Y") . "&date=" . $selectedDate . "'>Current Month</a>";
+    $calendar .= "<a class='btn btn-primary btn-xs' href='?month=" . $nextMonth . "&year=" . $nextYear . "&date=" . $selectedDate . "'>Next Month</a></center>";
     $calendar .= "<br><tr>";
 
     //Display day of week header
@@ -123,7 +135,7 @@ function timeslots($duration, $cleanup, $start, $end)
             break;
         }
 
-        $slots[] = $intStart->format("H:iA") . "-" . $endPeriod->format("H:iA");
+        $slots[] = $intStart->format("H:i") . "-" . $endPeriod->format("H:i");
     }
 
     return $slots;
@@ -152,13 +164,18 @@ function build_timeslot($duration, $cleanup, $start, $end, $bookings)
 }
 
 
+// Check when timeslot is clicked. Check if the selected timeslot is just booked by another user.
 if (isset($_POST['book'])) {
     $_SESSION['timeslot'] = $_POST['book'];
 
-    //TODO: Check timeslot available in database or not before moving on
-
-    header("Location: booking_confirmation.php?");
-    exit();
+    $result = $mysqli->query("select * from bookings where date = '" . $_SESSION['selectedDate'] . "' AND timeslot = '" . $_SESSION['timeslot'] . "' AND service = '" . $_SESSION['service'] . "'");
+    $num_results = $result->num_rows;
+    if ($num_results > 0) {
+        $msg = "<div class='alert alert-danger'>Already Booked</div>";
+    } else {
+        header("Location: booking_confirmation.php?");
+        exit();
+    }
 }
 
 ?>
@@ -170,12 +187,15 @@ if (isset($_POST['book'])) {
 <head>
     <title>Booking Calendar</title>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" type="text/css" href="main.css">
+
 
 </head>
 
 <body>
     <div class="container">
+        <a href="booking_service.php">Back</a>
+
         <div class="calendar">
             <?php
             $dateComponents = getdate();
@@ -195,6 +215,9 @@ if (isset($_POST['book'])) {
             <?php
             echo build_timeslot($duration, $cleanup, $start, $end, $bookings);
             ?>
+        </div>
+        <div class="alert-message">
+            <?php echo (isset($msg)) ? $msg : ""; ?>
         </div>
     </div>
 
