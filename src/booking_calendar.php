@@ -20,14 +20,11 @@ if (!isset($_SESSION['service'])) {
 
 if (isset($_GET['date'])) {
     $_SESSION['selectedDate'] = $_GET['date'];
-
-
 }
 
 // Default selected date is today
 if (!isset($_SESSION['selectedDate'])) {
     $_SESSION['selectedDate'] = date("Y-m-d");
-
 }
 $result = $mysqli->query("select * from bookings where date = '" . $_SESSION['selectedDate'] . "' AND service = '" . $_SESSION['service'] . "' ");
 $bookings = array();
@@ -88,10 +85,14 @@ function build_calendar($month, $year)
         $currentDayRel = str_pad($currentDay, 2, "0", STR_PAD_LEFT);
         $date = "$year-$month-$currentDayRel";
 
+        $dayInWeek = date("l", mktime(0, 0, 0, $month, $currentDayRel, $year));
+
         $selected = $date == $_SESSION['selectedDate'] ? 'selected' : '';
         if ($date < date('Y-m-d')) {
             $calendar .= "<td class='pastday' > <h4>$currentDay</h4></td>";
-        } else {
+        } elseif (isDayOff($dayInWeek, $_SESSION['service']))
+            $calendar .= "<td class='pastday' > <h4>$currentDay</h4></td>";
+        else {
 
             $calendar .= "<td class='$selected available-date'  ><a  href='?month=" . $month . "&year=" . $year . "&date=" . $date . "'>
             <h4>$currentDay</h4></a></td>";
@@ -115,10 +116,6 @@ function build_calendar($month, $year)
     return $calendar;
 }
 
-$duration = 50;
-$cleanup = 10;
-$start = "09:00";
-$end = "20:00";
 
 function timeslots($duration, $cleanup, $start, $end)
 {
@@ -178,6 +175,31 @@ if (isset($_POST['book'])) {
     }
 }
 
+function isDayOff($dateInWeek, $service)
+{
+    global $mysqli;
+    $result = $mysqli->query("select dayoff from service_day_off where service = '" . $service . "' ");
+    $num_results = $result->num_rows;
+    for ($i = 0; $i < $num_results; $i++) {
+        $row = $result->fetch_assoc();
+        if ($dateInWeek == $row['dayoff']){
+            return True;
+        }
+    }
+    $result->free();
+    return False;
+}
+
+function getWorkingHour($service){
+    global $mysqli;
+    $result = $mysqli->query("select working_hour from service_working_hour where service = '" . $service . "' ");
+    $row = $result->fetch_assoc();
+    $workingHour =  $row['working_hour'];
+    $workingHour = explode("-", $workingHour);
+    $result->free();
+    return $workingHour;
+}
+
 ?>
 
 
@@ -213,6 +235,12 @@ if (isset($_POST['book'])) {
 
         <div class="timeslot-group">
             <?php
+            $workingHour = getWorkingHour($_SESSION["service"]);
+            $start = $workingHour[0];
+            $end = $workingHour[1];
+            $duration = 50;
+            $cleanup = 10;
+
             echo build_timeslot($duration, $cleanup, $start, $end, $bookings);
             ?>
         </div>
