@@ -20,14 +20,11 @@ if (!isset($_SESSION['service'])) {
 
 if (isset($_GET['date'])) {
     $_SESSION['selectedDate'] = $_GET['date'];
-
-
 }
 
 // Default selected date is today
 if (!isset($_SESSION['selectedDate'])) {
     $_SESSION['selectedDate'] = date("Y-m-d");
-
 }
 $result = $mysqli->query("select * from bookings where date = '" . $_SESSION['selectedDate'] . "' AND service = '" . $_SESSION['service'] . "' ");
 $bookings = array();
@@ -88,10 +85,14 @@ function build_calendar($month, $year)
         $currentDayRel = str_pad($currentDay, 2, "0", STR_PAD_LEFT);
         $date = "$year-$month-$currentDayRel";
 
+        $dayInWeek = date("l", mktime(0, 0, 0, $month, $currentDayRel, $year));
+
         $selected = $date == $_SESSION['selectedDate'] ? 'selected' : '';
         if ($date < date('Y-m-d')) {
             $calendar .= "<td class='pastday' > <h4>$currentDay</h4></td>";
-        } else {
+        } elseif (isDayOff($dayInWeek, $_SESSION['service']))
+            $calendar .= "<td class='pastday' > <h4>$currentDay</h4></td>";
+        else {
 
             $calendar .= "<td class='$selected available-date'  ><a  href='?month=" . $month . "&year=" . $year . "&date=" . $date . "'>
             <h4>$currentDay</h4></a></td>";
@@ -115,10 +116,6 @@ function build_calendar($month, $year)
     return $calendar;
 }
 
-$duration = 50;
-$cleanup = 10;
-$start = "09:00";
-$end = "20:00";
 
 function timeslots($duration, $cleanup, $start, $end)
 {
@@ -178,60 +175,110 @@ if (isset($_POST['book'])) {
     }
 }
 
+function isDayOff($dateInWeek, $service)
+{
+    global $mysqli;
+    $result = $mysqli->query("select dayoff from service_day_off where service = '" . $service . "' ");
+    $num_results = $result->num_rows;
+    for ($i = 0; $i < $num_results; $i++) {
+        $row = $result->fetch_assoc();
+        if ($dateInWeek == $row['dayoff']) {
+            return True;
+        }
+    }
+    $result->free();
+    return False;
+}
+
+function getWorkingHour($service)
+{
+    global $mysqli;
+    $result = $mysqli->query("select working_hour from service_working_hour where service = '" . $service . "' ");
+    $row = $result->fetch_assoc();
+    $workingHour =  $row['working_hour'];
+    $workingHour = explode("-", $workingHour);
+    $result->free();
+    return $workingHour;
+}
+
 ?>
 
+
 <html lang="en">
+
 <head>
     <title>Booking Calendar</title>
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="stylesheet.css">
 </head>
-<body>
-    <div id="wrapper">
-      <header>
-        <div class="topnav">
-          <a class="imgbutton" href="index.html"><img class="logo" src="assets/logo4.png" href="#home"></a>
-          <a href="services.html">Services</a>
-          <a href="team.html">Team</a>
-          <a href="about.html">About</a>
-          <a href="booking_service.php"><button class="top_btn"><strong>BOOK NOW</strong></button></a>
-        </div>
-        <div class="box_img">
-          <img src="assets/test.jpg" alt="test">
-          <div class="centered">Booking Calender</div>
-        </div>
-      </header>
-    
-      <div class="container2">
-        <a href="booking_service.php">Back</a>
-        <div class="calendar">
-            <?php
-            $dateComponents = getdate();
-            if (isset($_GET['month']) && isset($_GET['year'])) {
-                $month = $_GET["month"];
-                $year = $_GET['year'];
-            } else {
-                $month = $dateComponents["mon"];
-                $year = $dateComponents["year"];
-            }
-            echo build_calendar($month, $year);
-            ?>
-        </div><br>
-        <div class="timeslot-group">
-            <?php
-            echo build_timeslot($duration, $cleanup, $start, $end, $bookings);
-            ?>
-        </div>
-        <div class="alert-message">
-            <?php echo (isset($msg)) ? $msg : ""; ?>
-        </div><br>
 
-    <footer class="calender_footer">
-        <div class="botnav">
-          <a class="imgbutton" href="index.html"><img class="logo2" src="assets/logo4.png" href="#home"></a>
-          <div class="bottombox"><small><i>Copyright &copy; 2021 Health@Mental</i></small></div>
+<body>
+
+    <!-- This script will make the page appear at the same position when reload -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function(event) {
+            var scrollpos = localStorage.getItem('scrollpos');
+            if (scrollpos) window.scrollTo(0, scrollpos);
+        });
+
+        window.onbeforeunload = function(e) {
+            localStorage.setItem('scrollpos', window.scrollY);
+            alert(window.scrollY);
+        };
+    </script>
+
+    <div id="wrapper">
+        <header>
+            <div class="topnav">
+                <a class="imgbutton" href="index.html"><img class="logo" src="assets/logo4.png" href="#home"></a>
+                <a href="services.html">Services</a>
+                <a href="team.html">Team</a>
+                <a href="about.html">About</a>
+                <a href="booking_service.php"><button class="top_btn"><strong>BOOK NOW</strong></button></a>
+            </div>
+            <div class="box_img">
+                <img src="assets/test.jpg" alt="test">
+                <div class="centered">Booking Calender</div>
+            </div>
+        </header>
+
+        <div class="container2">
+            <a href="booking_service.php">Back</a>
+            <div class="calendar">
+                <?php
+                $dateComponents = getdate();
+                if (isset($_GET['month']) && isset($_GET['year'])) {
+                    $month = $_GET["month"];
+                    $year = $_GET['year'];
+                } else {
+                    $month = $dateComponents["mon"];
+                    $year = $dateComponents["year"];
+                }
+                echo build_calendar($month, $year);
+                ?>
+            </div><br>
+            <div class="timeslot-group">
+                <?php
+                $workingHour = getWorkingHour($_SESSION["service"]);
+                $start = $workingHour[0];
+                $end = $workingHour[1];
+                $duration = 50;
+                $cleanup = 10;
+
+                echo build_timeslot($duration, $cleanup, $start, $end, $bookings);
+                ?>
+            </div>
+            <div class="alert-message">
+                <?php echo (isset($msg)) ? $msg : ""; ?>
+            </div><br>
+
+            <footer class="calender_footer">
+                <div class="botnav">
+                    <a class="imgbutton" href="index.html"><img class="logo2" src="assets/logo4.png" href="#home"></a>
+                    <div class="bottombox"><small><i>Copyright &copy; 2021 Health@Mental</i></small></div>
+                </div>
+            </footer>
         </div>
-      </footer>
-    </div>
-  </body>
+</body>
+
 </html>
