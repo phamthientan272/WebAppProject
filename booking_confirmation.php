@@ -103,7 +103,6 @@ function displayServiceImage($service)
     return $serviceImage;
 }
 
-
 ?>
 
 
@@ -142,28 +141,30 @@ function displayServiceImage($service)
 
                 <div class="patient-info">
                     <?php echo displayBookingInfo() ?>
-
-                    <form id="form" method="post">
+                    <form id="form" method="post" onsubmit="return validateForm()" >
                         <label for="name">*Name:
                             <span role="alert" id="nameError" class="error" aria-hidden="true">
                                 Please enter a valid name
                             </span>
-                            <input type="text" name="name" id="name"  placeholder="Enter your name here">
+                            <input type="text" name="name" id="name" required placeholder="Enter your name here">
                         </label>
-
-
                         <label for="email">*Email:
                             <span role="alert" id="emailError" class="error" aria-hidden="true">
                                 Please enter a valid email
                             </span>
-                            <input type="email" name="email" id="email"  placeholder="Enter your email here">
+                            <input type="email" name="email" id="email" required placeholder="Enter your email here">
                         </label>
 
-                        <button type="submit" value="Book Now" id="submit" name="submit">Submit</button>
-
+                        <input type="submit" value="Book Now" id="submit" name="submit" >
                     </form>
                     <script type="text/javascript" src="validator.js"></script>
+
                 </div>
+
+                <div>
+                    <?php echo (isset($msg)) ? $msg : ""; ?>
+                </div>
+
             </div>
 
 

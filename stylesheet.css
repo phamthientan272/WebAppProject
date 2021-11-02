@@ -471,10 +471,10 @@ label {
    color: red;
  }
 
- .error.visible {
+.error.visible {
    display: block;
  }
 
- input.invalid {
+input.invalid {
    border-color: red;
  }
