@@ -170,7 +170,7 @@ if (isset($_POST['book'])) {
     if ($num_results > 0) {
         $msg = "<div class='alert alert-danger'>Already Booked</div>";
     } else {
-        header("Location: booking_confirmation.php?");
+        header("Location: booking_form.php?");
         exit();
     }
 }
