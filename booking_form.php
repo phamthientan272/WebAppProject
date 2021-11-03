@@ -14,6 +14,7 @@ $mysqli = new mysqli('localhost', 'f32ee', 'f32ee', 'f32ee');
 if (isset($_POST['submit'])) {
     $name = $_POST['name'];
     $email = $_POST['email'];
+    $phone = $_POST['phone'];
     $service = $_SESSION['service'];
     $timeslot = $_SESSION['timeslot'];
     $date = $_SESSION['selectedDate'];
@@ -21,19 +22,20 @@ if (isset($_POST['submit'])) {
 
     $_SESSION['name'] = $_POST['name'];
     $_SESSION['email'] = $_POST['email'];
+    $_SESSION['phone'] = $_POST['phone'];
 
 
     $result = $mysqli->query("select * from bookings where service = '" . $service . "' AND
     date = '" . $date . "' AND timeslot = '" . $timeslot . "'");
     $num_results = $result->num_rows;
     if ($num_results > 0) {
-        $msg = "<div class='alert alert-danger'>Already Booked</div>";
+        $msg = "<div class='error visible'>This time slot is already booked. Please choose another one.</div>";
     } else {
-        $msg = "<div class='alert alert-danger'>Can book</div>";
-        $stmt = $mysqli->prepare("INSERT INTO bookings (service, date, timeslot, name, email) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param('sssss', $service, $date, $timeslot, $name, $email);
+        $id = uniqid();
+        $stmt = $mysqli->prepare("INSERT INTO bookings (id, service, date, timeslot, name, email, phone) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param('sssssss', $id, $service, $date, $timeslot, $name, $email, $phone);
         $stmt->execute();
-        sendEmail($name, $email, $service, $timeslot, $date);
+        sendEmail($name, $email, $service, $timeslot, $date, $id);
 
         header("Location: booking_confirmation.php");
         exit();
@@ -50,7 +52,7 @@ function sanitize_my_email($field)
     }
 }
 
-function sendEmail($recipient, $email, $service, $timeslot, $date)
+function sendEmail($recipient, $email, $service, $timeslot, $date, $id)
 {
     $date = date('d/m/Y', strtotime($date));
     $to_email = $email;
@@ -58,9 +60,13 @@ function sendEmail($recipient, $email, $service, $timeslot, $date)
     $mail_body =
         "
     Dear " . $recipient . ",
+
     We have received your booking request for service " . $service . ".
     Looking forward to serving you on " . $date . " at " . $timeslot . ".
-    If you wish to cancel, please go to this link https://www.codexworld.com/send-beautiful-html-email-using-php/
+
+    If you wish to cancel, please go to this link http://192.168.56.2/f32ee/WebAppProject/cancel.php?id=".$id.".
+
+    Best Regards,
     Health@Mental
     ";
 
@@ -149,6 +155,12 @@ function displayServiceImage($service)
                                 Please enter a valid email
                             </span>
                             <input type="email" name="email" id="email" required placeholder="Enter your email here">
+                        </label>
+                        <label for="phone">*Phone Number:
+                            <span role="alert" id="phoneError" class="error" aria-hidden="true">
+                                Please enter a valid 8 digits phone number
+                            </span>
+                            <input type="number" name="phone" id="phone" required>
                         </label>
 
                         <input type="submit" value="Book Now" id="submit" name="submit">
