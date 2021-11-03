@@ -1,8 +1,28 @@
 body {
    font-family: Arial,Verdana,sans-serif;
+   font-size: 20px;
    background-color: #f1faf8;
    margin:0;
 }
+
+/* Column layout */
+.side-col {
+   float: left;
+   width: 40%;
+}
+
+.main-col {
+   float: right;
+   width: 60%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+   content: "";
+   display: table;
+   clear: both;
+}
+
 #wrapper {
    background-color: #d6fff6;
    color: #000066;
@@ -289,6 +309,14 @@ text-align: center;
    padding: 0px 0px 0px 0px;
 }
 
+.text-left{
+   text-align: left;
+}
+
+button {
+   cursor: pointer;
+}
+
 /* test */
 table {
    border: 1px solid black;
@@ -326,12 +354,12 @@ background: blue;
 .timeslot{
    float: left;
    margin-bottom:15px;
-   padding: 10px 20px;
+   padding: 10px 40px 10px 0px;
 }
 
 .timeslot-group{
    margin-top: 20px;
-   margin-left: auto;
+   margin-left: auto ;
    margin-right: auto;
    width: 800px;
 }
@@ -420,9 +448,33 @@ background: blue;
    color: #000000;
 }
 .service_box a:hover {background-color: #ddd;}
-.container2 { 
+.container2 {
    display: flex;
    flex-direction: column;
 }
 .calender_footer {position:relative;
    bottom:0;}
+
+label, input {
+   display: block;
+}
+
+label {
+   margin-bottom: 20px;
+}
+
+
+
+.error {
+   display: none;
+   font-size: 0.6em;
+   color: red;
+ }
+
+.error.visible {
+   display: block;
+ }
+
+input.invalid {
+   border-color: red;
+ }

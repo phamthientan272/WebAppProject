@@ -142,7 +142,7 @@ function build_timeslot($duration, $cleanup, $start, $end, $bookings)
 {
     $selectedDate = isset($_SESSION['selectedDate']) ? date('d/m/Y', strtotime($_SESSION['selectedDate'])) : date("d/m/Y");
     $timeslotHtml = "<form method='POST'>";
-    $timeslotHtml .= "<h3 class='text-center'>Book for Date: $selectedDate </h3>";
+    $timeslotHtml .= "<h3 class='text-left'>Book for Date: $selectedDate </h3>";
 
     $timeslots = timeslots($duration, $cleanup, $start, $end);
     foreach ($timeslots as $ts) {
@@ -201,6 +201,30 @@ function getWorkingHour($service)
     return $workingHour;
 }
 
+function displayServiceImage($service)
+{
+    $imageName = "";
+    $serviceName = "";
+    if ($service == "Therapy") {
+        $imageName = "coffee";
+        $serviceName = "Therapy & Counseling";
+    } elseif ($service == "Massage") {
+        $imageName = "massage";
+        $serviceName = "Massage";
+    } elseif ($service == "Yoga") {
+        $imageName = "yoga";
+        $serviceName = "Yoga";
+    }
+
+    $src  = "assets/" . $imageName . ".jpg";
+
+    $serviceImage = "
+    <div class='service_box'>
+    <div class='servicebox1'> <img src='" . $src . "' alt='" . $imageName . "'>
+    <div class='centered_service'>" . $serviceName . "</div></div></div>";
+    return $serviceImage;
+}
+
 ?>
 
 
@@ -242,7 +266,10 @@ function getWorkingHour($service)
             </div>
         </header>
 
+
+
         <div class="container2">
+
             <a href="booking_service.php">Back</a>
             <div class="calendar">
                 <?php
@@ -257,20 +284,28 @@ function getWorkingHour($service)
                 echo build_calendar($month, $year);
                 ?>
             </div><br>
-            <div class="timeslot-group">
-                <?php
-                $workingHour = getWorkingHour($_SESSION["service"]);
-                $start = $workingHour[0];
-                $end = $workingHour[1];
-                $duration = 50;
-                $cleanup = 10;
+            <div class="row">
+                <div class="side-col">
+                    <?php echo displayServiceImage($_SESSION['service']); ?>
+                </div>
 
-                echo build_timeslot($duration, $cleanup, $start, $end, $bookings);
-                ?>
+                <div class="timeslot-group main-col">
+                    <?php
+                    $workingHour = getWorkingHour($_SESSION["service"]);
+                    $start = $workingHour[0];
+                    $end = $workingHour[1];
+                    $duration = 50;
+                    $cleanup = 10;
+
+                    echo build_timeslot($duration, $cleanup, $start, $end, $bookings);
+                    ?>
+                </div>
+                <div class="alert-message">
+                    <?php echo (isset($msg)) ? $msg : ""; ?>
+                </div><br>
             </div>
-            <div class="alert-message">
-                <?php echo (isset($msg)) ? $msg : ""; ?>
-            </div><br>
+
+
 
             <footer class="calender_footer">
                 <div class="botnav">
