@@ -37,7 +37,6 @@ if (isset($_POST['submit'])) {
 
         header("Location: booking_confirmation.php");
         exit();
-
     }
 }
 
@@ -120,18 +119,13 @@ function displayServiceImage($service)
 <body>
     <div id="wrapper">
         <header>
-            <div class="topnav">
-                <a class="imgbutton" href="index.html"><img class="logo" src="assets/logo4.png" href="#home"></a>
-                <a href="services.html">Services</a>
-                <a href="team.html">Team</a>
-                <a href="about.html">About</a>
-                <a href="booking_service.php"><button class="top_btn"><strong>BOOK NOW</strong></button></a>
-            </div>
-            <div class="box_img">
-                <img src="assets/test.jpg" alt="test">
-                <div class="centered">Booking Summary</div>
-            </div>
+            <?php include 'header.php' ?>
         </header>
+
+        <div class="box_img">
+            <img src="assets/test.jpg" alt="test">
+            <div class="centered">Booking Summary</div>
+        </div>
 
         <a href="booking_calendar.php">Back</a>
         <div class="row">
@@ -143,7 +137,7 @@ function displayServiceImage($service)
 
                 <div class="patient-info">
                     <?php echo displayBookingInfo() ?>
-                    <form id="form" method="post" onsubmit="return validateForm()" >
+                    <form id="form" method="post" onsubmit="return validateForm()">
                         <label for="name">*Name:
                             <span role="alert" id="nameError" class="error" aria-hidden="true">
                                 Please enter a valid name
@@ -157,7 +151,7 @@ function displayServiceImage($service)
                             <input type="email" name="email" id="email" required placeholder="Enter your email here">
                         </label>
 
-                        <input type="submit" value="Book Now" id="submit" name="submit" >
+                        <input type="submit" value="Book Now" id="submit" name="submit">
                     </form>
                     <script type="text/javascript" src="validator.js"></script>
 
@@ -172,10 +166,7 @@ function displayServiceImage($service)
 
         </div>
         <footer>
-            <div class="botnav">
-                <a class="imgbutton" href="index.html"><img class="logo2" src="assets/logo4.png" href="#home"></a>
-                <div class="bottombox"><small><i>Copyright &copy; 2021 Health@Mental</i></small></div>
-            </div>
+            <?php include 'footer.php' ?>
         </footer>
     </div>
 </body>
