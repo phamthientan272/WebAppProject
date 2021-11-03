@@ -43,8 +43,30 @@ function validateEmail() {
     }
 }
 
+function validatePhone()
+{
+    var phone = document.getElementById("phone");
+    const phoneError = document.getElementById("phoneError");
+
+    if (phone.value.match(/\d/g).length != 8) {
+        phoneError.classList.add("visible");
+        phoneError.setAttribute("aria-hidden", false);
+        phoneError.setAttribute("aria-invalid", true);
+        phone.classList.add("invalid");
+        phone.focus();
+        phone.select();
+        return false;
+    } else {
+        phoneError.classList.remove("visible");
+        phoneError.setAttribute("aria-hidden", true);
+        phoneError.setAttribute("aria-invalid", false);
+        phone.classList.remove("invalid");
+        return true;
+    }
+}
+
 
 function validateForm()
 {
-    return validateEmail() &&  validateName();
+    return validateEmail() &&  validateName() && validatePhone();
 }
