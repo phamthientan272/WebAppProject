@@ -7,6 +7,7 @@ if (!isset($_SESSION['name']) || !isset($_SESSION['email'])) {
 
 ?>
 
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -16,22 +17,21 @@ if (!isset($_SESSION['name']) || !isset($_SESSION['email'])) {
 </head>
 
 <body>
-    <div id="wrapper">
+    <div id="wrapper2">
         <header>
             <?php include 'header.php' ?>
         </header>
 
         <div class="box_img">
-            <img src="assets/test.jpg" alt="test">
+            <img src="assets/booking.jpg" alt="test">
             <div class="centered">Confirmation</div>
         </div>
 
-        <div>
+        <div class="confirm">
             <p>Dear <?php echo $_SESSION['name'] ?>,</p>
-            <p>We have received your booking apointment and sent a confimation email to address <?php echo $_SESSION['email'] ?>.</p>
+            <p>We have received your booking appointment and sent a confirmation email to address: <?php echo $_SESSION['email'] ?>.</p>
             <p>Looking forward to seeing you.</p>
             <p>Health@Mental</p>
-
         </div>
 
         <footer>

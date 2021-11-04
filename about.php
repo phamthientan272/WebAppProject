@@ -11,21 +11,19 @@
   <div id="wrapper">
     <header>
       <?php include 'header.php' ?>
-
     </header>
 
     <div class="box_img">
-      <img src="assets/test.jpg" alt="test">
+      <img src="assets/about.jpg">
       <div class="centered">About Us</div>
     </div>
 
-    <h2></h2>
     <div id="box2">
-      <div class="image_box">
-        <img class="img2" src="assets/test3.jpg" alt="test2">
+      <div class="about_box">
+        <img class="img3" src="assets/map.jpg" alt="test2">
       </div>
       <div class="paragraph_box">
-        <p>Phone Number: <br>Email: <br>Location: <br></p>
+        <p>We are two final year EEE students working on a project for EE4717.<br><br>This imaginary clinic provides services and these services can be found in their corresponding web pages. <br><br>Phone Number: +65 12345678 <br>Email: f32ee@localhost<br>Location: 20 Nanyang Ave, 639809<br></p>
       </div>
     </div>
 

@@ -8,69 +8,65 @@
 </head>
 
 <body>
-  <div id="wrapper">
+  <div id="wrapper2">
     <header>
       <?php include 'header.php' ?>
     </header>
 
     <div class="box_img">
-      <img src="assets/test.jpg" alt="test">
+      <img src="assets/services.jpg">
       <div class="centered">Our Services</div>
     </div>
 
-    <h2>Therapy & Counseling</h2>
+    <h2 class="service_text">Therapy & Counseling</h2>
     <div id="box2">
       <div class="image_box">
-        <img class="img2" src="assets/test3.jpg" alt="test2">
+        <img class="img2" src="assets/doctor1.jpg" alt="test2">
       </div>
       <div class="paragraph_box">
-        <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
           magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-          Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          consequat.<br><br>Duration: 50 minutes<br>Price: $50 (Payment to be collected at the day itself)</p>
       </div>
       <div class="button_box">
         <a href="booking_service.php"><button class="paragraph_btn">Book Now</button></a>
       </div>
     </div>
 
-    <h2>Yoga Class</h2>
+    <h2 class="service_text1">Yoga Class</h2>
     <div id="box2">
       <div class="image_box">
-        <img class="img2" src="assets/test3.jpg" alt="test2">
+        <img class="img2" src="assets/yogi1.jpg" alt="test2">
       </div>
       <div class="paragraph_box">
         <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
           magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-          Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          consequat.<br><br>Duration: 50 minutes<br>Price: $50 (Payment to be collected at the day itself)</p>
       </div>
       <div class="button_box">
-        <button class="paragraph_btn">Book Now</button>
+       <a href="booking_service.php"><button class="paragraph_btn">Book Now</button></a>
       </div>
     </div>
 
-    <h2>Massage</h2>
+    <h2 class="service_text1">Massage</h2>
     <div id="box2">
       <div class="image_box">
-        <img class="img2" src="assets/test3.jpg" alt="test2">
+        <img class="img2" src="assets/psych1.jpg" alt="test2">
       </div>
       <div class="paragraph_box">
         <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
           magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-          Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          consequat.<br><br>Duration: 50 minutes<br>Price: $50 (Payment to be collected at the day itself)</p>
       </div>
       <div class="button_box">
-        <button class="paragraph_btn">Book Now</button>
+        <a href="booking_service.php"><button class="paragraph_btn">Book Now</button></a>
       </div>
     </div>
     <br>
-
+    
     <footer>
       <?php include 'footer.php' ?>
     </footer>
   </div>
 </body>
-
 </html>

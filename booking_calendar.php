@@ -1,4 +1,5 @@
 <?php
+
 if (!isset($_SESSION))  session_start();
 $mysqli = new mysqli('localhost', 'f32ee', 'f32ee', 'f32ee');
 
@@ -13,11 +14,7 @@ if (!isset($_SESSION['service'])) {
     exit();
 }
 
-// ----------------------
-
-
 // Get selected date and all booked timeslot for that date
-
 if (isset($_GET['date'])) {
     $_SESSION['selectedDate'] = $_GET['date'];
 }
@@ -56,9 +53,9 @@ function build_calendar($month, $year)
     $calendar .= "<center><h2>$monthName $year</h2>";
 
     $selectedDate = $_SESSION['selectedDate'];
-    $calendar .= "<a class='btn btn-primary btn-xs' href='?month=" . $prevMonth . "&year=" . $prevYear . "&date=" . $selectedDate . "'>Prev Month</a>";
-    $calendar .= "<a class='btn btn-primary btn-xs' href='?month=" . date('m') . "&year=" . date("Y") . "&date=" . $selectedDate . "'>Current Month</a>";
-    $calendar .= "<a class='btn btn-primary btn-xs' href='?month=" . $nextMonth . "&year=" . $nextYear . "&date=" . $selectedDate . "'>Next Month</a></center>";
+    $calendar .= "<a class='btn btn-primary btn-xs' href='?month=" . $prevMonth . "&year=" . $prevYear . "&date=" . $selectedDate . "'><button class='month'>Prev Month</button></a>";
+    $calendar .= "<a class='btn btn-primary btn-xs' href='?month=" . date('m') . "&year=" . date("Y") . "&date=" . $selectedDate . "'><button class='month'>Current Month</button></a>";
+    $calendar .= "<a class='btn btn-primary btn-xs' href='?month=" . $nextMonth . "&year=" . $nextYear . "&date=" . $selectedDate . "'><button class='month'>Next Month</button></a></center>";
     $calendar .= "<br><tr>";
 
     //Display day of week header
@@ -168,13 +165,12 @@ if (isset($_POST['book'])) {
     $result = $mysqli->query("select * from bookings where date = '" . $_SESSION['selectedDate'] . "' AND timeslot = '" . $_SESSION['timeslot'] . "' AND service = '" . $_SESSION['service'] . "'");
     $num_results = $result->num_rows;
     if ($num_results > 0) {
-        $msg = "<div class='alert alert-danger'>Already Booked</div>";
+        $msg = "<div class='alert alert-danger'>Already Booked, Please Choose Another Date or Time.</div>";
     } else {
         header("Location: booking_form.php?");
         exit();
     }
 }
-
 function isDayOff($dateInWeek, $service)
 {
     global $mysqli;
@@ -189,7 +185,6 @@ function isDayOff($dateInWeek, $service)
     $result->free();
     return False;
 }
-
 function getWorkingHour($service)
 {
     global $mysqli;
@@ -200,7 +195,6 @@ function getWorkingHour($service)
     $result->free();
     return $workingHour;
 }
-
 function displayServiceImage($service)
 {
     $imageName = "";
@@ -219,15 +213,15 @@ function displayServiceImage($service)
     $src  = "assets/" . $imageName . ".jpg";
 
     $serviceImage = "
-    <div class='service_box'>
-    <div class='servicebox1'> <img src='" . $src . "' alt='" . $imageName . "'>
+    <div class='service_box_booking'>
+    <div class='servicebox_booking'> <img src='" . $src . "' alt='" . $imageName . "'>
     <div class='centered_service'>" . $serviceName . "</div></div></div>";
     return $serviceImage;
 }
 
 ?>
 
-
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -251,19 +245,17 @@ function displayServiceImage($service)
         };
     </script>
 
-    <div id="wrapper">
+    <div id="wrapper2">
         <header>
             <?php include 'header.php' ?>
         </header>
 
         <div class="box_img">
-            <img src="assets/test.jpg" alt="test">
+            <img src="assets/booking.jpg">
             <div class="centered">Booking Calender</div>
+            <div class="centered_booking">Choose the date of your appointment:</div>
         </div>
-
-        <div class="container2">
-
-            <a href="booking_service.php">Back</a>
+            <a href="booking_service.php"><button class="month">Back</button></a>
             <div class="calendar">
                 <?php
                 $dateComponents = getdate();
@@ -276,6 +268,9 @@ function displayServiceImage($service)
                 }
                 echo build_calendar($month, $year);
                 ?>
+                <div class="alert-message">
+                    <?php echo (isset($msg)) ? $msg : ""; ?>
+                    </div><br>
             </div><br>
             <div class="row">
                 <div class="side-col">
@@ -289,16 +284,13 @@ function displayServiceImage($service)
                     $end = $workingHour[1];
                     $duration = 50;
                     $cleanup = 10;
-
                     echo build_timeslot($duration, $cleanup, $start, $end, $bookings);
                     ?>
+                
                 </div>
-                <div class="alert-message">
-                    <?php echo (isset($msg)) ? $msg : ""; ?>
-                </div><br>
+
+                
             </div>
-
-
 
             <footer>
                 <?php include 'footer.php' ?>

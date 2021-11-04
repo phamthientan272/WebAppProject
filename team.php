@@ -8,61 +8,58 @@
 </head>
 
 <body>
-  <div id="wrapper">
+  <div id="wrapper1">
     <header>
       <?php include 'header.php' ?>
     </header>
 
     <div class="box_img">
-      <img src="assets/test.jpg" alt="test">
+      <img src="assets/team.jpg">
       <div class="centered">Our Team</div>
     </div>
 
-    <h2>Dr. Who</h2>
+    <h2 class="service_text">Dr. Meredith Grey</h2>
     <div id="box2">
       <div class="image_box">
-        <img class="img2" src="assets/test3.jpg" alt="test2">
+        <img class="img2" src="assets/doctor.jpg" alt="test2">
       </div>
       <div class="paragraph_box">
         <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
           magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-          Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          consequat.<br><br>Education: MBBS, M Med (Psychiatry), FAMS<br>Experience: 10 Years (as of 2021)</p>
       </div>
       <div class="button_box">
         <a href="booking_service.php"><button class="paragraph_btn">Book Now</button></a>
       </div>
     </div>
 
-    <h2>Dr. Whippersnapper</h2>
+    <h2 class="service_text1">Ms. Joaquim Blue</h2>
     <div id="box2">
       <div class="image_box">
-        <img class="img2" src="assets/test3.jpg" alt="test2">
+        <img class="img2" src="assets/yogi.jpg">
       </div>
       <div class="paragraph_box">
         <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
           magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-          Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          consequat. <br><br>Education: BSc Sports & Exercise Science<br>Experience: 13 Years (as of 2021)</p>
       </div>
       <div class="button_box">
-        <button class="paragraph_btn">Book Now</button>
+        <a href="booking_service.php"><button class="paragraph_btn">Book Now</button></a>
       </div>
     </div>
 
-    <h2>Miss Joaquim</h2>
+    <h2 class="service_text1">Ms. Jane Doe</h2>
     <div id="box2">
       <div class="image_box">
-        <img class="img2" src="assets/test3.jpg" alt="test2">
+        <img class="img2" src="assets/psych.jpg" alt="test2">
       </div>
       <div class="paragraph_box">
         <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
           magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-          Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          consequat. <br><br>Education: Master of Musculoskeletal & Sports Physiotherapist (Aus)<br>Experience: 7 Years (as of 2021)</p>
       </div>
       <div class="button_box">
-        <button class="paragraph_btn">Book Now</button>
+        <a href="booking_service.php"><button class="paragraph_btn">Book Now</button></a>
       </div>
     </div>
     <br>

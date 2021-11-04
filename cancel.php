@@ -30,7 +30,7 @@ if (isset($_POST['submit'])) {
         header("Location: cancel_confirmation.php");
         exit();
     } else {
-        $msg = "<div class='error visible'>This phone number is not as same as the registerd one.</div>";
+        $msg = "<div class='error visible'>This phone number is not as same as the registered one.</div>";
     }
 }
 
@@ -43,7 +43,7 @@ function sendEmail($recipient, $email, $service, $timeslot, $date)
         "
     Dear " . $recipient . ",
 
-    We have canceld your booking apointment for service " . $service . "  at " . $timeslot . " on " . $date . ".
+    We have cancelled your booking appointment for:\n    ". $service . " at " . $timeslot . " on " . $date . ".
 
     Best Regards,
     Health@Mental
@@ -56,8 +56,8 @@ function sendEmail($recipient, $email, $service, $timeslot, $date)
 
 ?>
 
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
     <title>Booking Cancellation</title>
     <meta charset="utf-8">
@@ -66,43 +66,39 @@ function sendEmail($recipient, $email, $service, $timeslot, $date)
 </head>
 
 <body>
-    <div id="wrapper">
+    <div id="wrapper2">
         <header>
             <?php include 'header.php' ?>
         </header>
 
         <div class="box_img">
-            <img src="assets/test.jpg" alt="test">
+            <img src="assets/booking.jpg" alt="test">
             <div class="centered">Cancellation</div>
         </div>
 
-        <div>
+        <div class="confirm">
             <p>Dear <?php echo $_SESSION['name'] ?>,</p>
             <p>If you would like to cancel your appointment for <?php echo $_SESSION['service'] ?> at <?php echo $_SESSION['timeslot'] . " on " . date('d/m/Y', strtotime($_SESSION['date'])) ?>, </p>
-            <p>Please key in your phone number that you have registerd with us.</p>
+            <p>Please key in your phone number that you have registered with us.</p>
+            
             <form id="form" method="post" onsubmit="return validatePhone()">
                 <label for="phone">Phone Number:
                     <span role="alert" id="phoneError" class="error" aria-hidden="true">
-                        Please enter a valid 8 digits phone number
-
+                        Please enter a valid 8-digit phone number.
                     </span>
                     <div>
                         <?php echo (isset($msg)) ? $msg : ""; ?>
                     </div>
                     <input type="tel" name="phone" id="phone" required>
                 </label>
-
-                <input type="submit" value="Cancel Appointment" id="submit" name="submit">
+                <input class="month2" type="submit" value="Cancel Appointment" id="submit" name="submit">
             </form>
             <script type="text/javascript" src="validator.js"></script>
 
-
         </div>
-
         <footer>
             <?php include 'footer.php' ?>
         </footer>
     </div>
 </body>
-
 </html>

@@ -1,6 +1,5 @@
 <?php
 
-
 if (!isset($_SESSION))  session_start();
 
 if (!isset($_SESSION['service']) || !isset($_SESSION['timeslot']) || !isset($_SESSION['selectedDate'])) {
@@ -29,7 +28,7 @@ if (isset($_POST['submit'])) {
     date = '" . $date . "' AND timeslot = '" . $timeslot . "'");
     $num_results = $result->num_rows;
     if ($num_results > 0) {
-        $msg = "<div class='error visible'>This time slot is already booked. Please choose another one.</div>";
+        $msg = "<div class='error visible'>This time slot is already booked. Please choose another timeslot.</div>";
     } else {
         $id = uniqid();
         $stmt = $mysqli->prepare("INSERT INTO bookings (id, service, date, timeslot, name, email, phone) VALUES (?, ?, ?, ?, ?, ?, ?)");
@@ -104,15 +103,15 @@ function displayServiceImage($service)
     $src  = "assets/" . $imageName . ".jpg";
 
     $serviceImage = "
-    <div class='service_box'>
-    <div class='servicebox1'> <img src='" . $src . "' alt='" . $imageName . "'>
+    <div class='service_box_booking1'>
+    <div class='servicebox_booking'> <img src='" . $src . "' alt='" . $imageName . "'>
     <div class='centered_service'>" . $serviceName . "</div></div></div>";
     return $serviceImage;
 }
 
 ?>
 
-
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -123,19 +122,19 @@ function displayServiceImage($service)
 </head>
 
 <body>
-    <div id="wrapper">
+    <div id="wrapper2">
         <header>
             <?php include 'header.php' ?>
         </header>
 
         <div class="box_img">
-            <img src="assets/test.jpg" alt="test">
+            <img src="assets/booking.jpg">
             <div class="centered">Booking Summary</div>
         </div>
 
-        <a href="booking_calendar.php">Back</a>
-        <div class="row">
-            <div class="side-col">
+        <a href="booking_service.php"><button class="month">Back</button></a>
+        <div class="row2">
+            <div class="side-col2">
                 <?php echo displayServiceImage($_SESSION['service']); ?>
             </div>
 
@@ -146,24 +145,24 @@ function displayServiceImage($service)
                     <form id="form" method="post" onsubmit="return validateForm()">
                         <label for="name">*Name:
                             <span role="alert" id="nameError" class="error" aria-hidden="true">
-                                Please enter a valid name
+                                Please enter a valid name.
                             </span>
                             <input type="text" name="name" id="name" required placeholder="Enter your name here">
                         </label>
                         <label for="email">*Email:
                             <span role="alert" id="emailError" class="error" aria-hidden="true">
-                                Please enter a valid email
+                                Please enter a valid email.
                             </span>
                             <input type="email" name="email" id="email" required placeholder="Enter your email here">
                         </label>
                         <label for="phone">*Phone Number:
                             <span role="alert" id="phoneError" class="error" aria-hidden="true">
-                                Please enter a valid 8 digits phone number
+                                Please enter a valid 8-digit phone number.
                             </span>
                             <input type="number" name="phone" id="phone" required>
                         </label>
 
-                        <input type="submit" value="Book Now" id="submit" name="submit">
+                        <input class="month2" type="submit" value="Book Now" id="submit" name="submit">
                     </form>
                     <script type="text/javascript" src="validator.js"></script>
 
@@ -174,13 +173,10 @@ function displayServiceImage($service)
                 </div>
 
             </div>
-
-
         </div>
         <footer>
             <?php include 'footer.php' ?>
         </footer>
     </div>
 </body>
-
 </html>
