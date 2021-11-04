@@ -15,8 +15,12 @@
 
     <div class="box_img">
       <img src="assets/test.jpg" alt="test">
-      <a href="booking_service.php"><button class="btn">Book Now!</button></a>
-    </div>
+        <div>
+          <h3 class="box_text_top">Let's Talk:<br>Mental Wellness.</h3>
+          <a href="booking_service.php"><button class="btn">BOOK NOW</button></a>
+          <a href="booking_service.php"><button class="btn2">SAFETY MEASURES</button></a>
+        </div>
+      </div>
 
     <h2>Our Services</h2>
     <div id="box">
