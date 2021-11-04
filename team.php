@@ -18,19 +18,22 @@
       <div class="centered">Our Team</div>
     </div>
 
-    <h2>Dr. Who</h2>
+    <h2>Dr. Grey Meredith</h2>
     <div id="box2">
-      <div class="image_box">
-        <img class="img2" src="assets/test3.jpg" alt="test2">
+      <div class="team-info">
+        <img src="assets/grey_mer.jpg" alt="Docter. Grey">
+        <ul>
+          <li>grey@heathmental</li>
+          <li>+65-89025080</li>
+          <li><a href="booking_service.php"><button>Book Now</button></a></li>
+        </ul>
       </div>
+
       <div class="paragraph_box">
         <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
           magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
           consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
           Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      </div>
-      <div class="button_box">
-        <a href="booking_service.php"><button class="paragraph_btn">Book Now</button></a>
       </div>
     </div>
 
