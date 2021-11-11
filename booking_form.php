@@ -159,7 +159,7 @@ function displayServiceImage($service)
                             <span role="alert" id="phoneError" class="error" aria-hidden="true">
                                 Please enter a valid 8-digit phone number.
                             </span>
-                            <input type="number" name="phone" id="phone" required>
+                            <input type="number" name="phone" id="phone" required onkeyup="if(this.value<0){this.value= this.value * -1}">
                         </label>
 
                         <input class="month2" type="submit" value="Book Now" id="submit" name="submit">

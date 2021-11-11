@@ -80,7 +80,7 @@ function sendEmail($recipient, $email, $service, $timeslot, $date)
             <p>Dear <?php echo $_SESSION['name'] ?>,</p>
             <p>If you would like to cancel your appointment for <?php echo $_SESSION['service'] ?> at <?php echo $_SESSION['timeslot'] . " on " . date('d/m/Y', strtotime($_SESSION['date'])) ?>, </p>
             <p>Please key in your phone number that you have registered with us.</p>
-            
+
             <form id="form" method="post" onsubmit="return validatePhone()">
                 <label for="phone">Phone Number:
                     <span role="alert" id="phoneError" class="error" aria-hidden="true">
@@ -89,7 +89,7 @@ function sendEmail($recipient, $email, $service, $timeslot, $date)
                     <div>
                         <?php echo (isset($msg)) ? $msg : ""; ?>
                     </div>
-                    <input type="tel" name="phone" id="phone" required>
+                    <input type="number" name="phone" id="phone" required onkeyup="if(this.value<0){this.value= this.value * -1}">
                 </label>
                 <input class="month2" type="submit" value="Cancel Appointment" id="submit" name="submit">
             </form>
