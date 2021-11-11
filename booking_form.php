@@ -132,7 +132,7 @@ function displayServiceImage($service)
             <div class="centered">Booking Summary</div>
         </div>
 
-        <a href="booking_service.php"><button class="month">Back</button></a>
+        <a href="booking_calendar.php"><button class="month">Back</button></a>
         <div class="row2">
             <div class="side-col2">
                 <?php echo displayServiceImage($_SESSION['service']); ?>
